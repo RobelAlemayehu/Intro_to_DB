@@ -39,12 +39,4 @@ CREATE TABLE ORDER_DETAILS (
     FOREIGN KEY (book_id) REFERENCES BOOKS(book_id)
 );
 
-INSERT INTO AUTHORS (author_id, author_name) VALUES (1, 'J.K. ROWLING');
-INSERT INTO BOOKS (book_id, title, author_id, price, publication_date)
-VALUES (1, 'HARRY POTTER', 1, 29.99, '2001-06-26');
-INSERT INTO CUSTOMERS (customer_id, customer_name, email, address)
-VALUES (1, 'JOHN DOE', 'john@example.com', '123 Main St');
-INSERT INTO ORDERS (order_id, customer_id, order_date)
-VALUES (1, 1, '2025-10-19');
-INSERT INTO ORDER_DETAILS (orderdetailid, order_id, book_id, quantity)
-VALUES (1, 1, 1, 2);
+
