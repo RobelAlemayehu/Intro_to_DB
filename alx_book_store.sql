@@ -40,7 +40,6 @@ CREATE TABLE ORDER_DETAILS (
     FOREIGN KEY (book_id) REFERENCES BOOKS(book_id)
 );
 
--- OPTIONAL SAMPLE DATA (recommended)
 INSERT INTO AUTHORS (author_id, author_name) VALUES (1, 'J.K. ROWLING');
 INSERT INTO BOOKS (book_id, title, author_id, price, publication_date)
 VALUES (1, 'HARRY POTTER', 1, 29.99, '2001-06-26');
