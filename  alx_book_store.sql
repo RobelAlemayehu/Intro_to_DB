@@ -1,158 +1,52 @@
--- MySQL dump 10.13  Distrib 8.0.43, for Linux (x86_64)
---
--- Host: localhost    Database: alx_book_store
--- ------------------------------------------------------
--- Server version	8.0.43-0ubuntu0.24.04.2
+-- MySQL Database for ALX Book Store
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+CREATE DATABASE IF NOT EXISTS alx_book_store;
+USE alx_book_store;
 
---
--- Table structure for table `Authors`
---
+CREATE TABLE AUTHORS (
+    author_id INT PRIMARY KEY,
+    author_name VARCHAR(215)
+);
 
-DROP TABLE IF EXISTS `Authors`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Authors` (
-  `author_id` int NOT NULL,
-  `author_name` varchar(215) DEFAULT NULL,
-  PRIMARY KEY (`author_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE TABLE BOOKS (
+    book_id INT PRIMARY KEY,
+    title VARCHAR(130),
+    author_id INT,
+    price DOUBLE,
+    publication_date DATE,
+    FOREIGN KEY (author_id) REFERENCES AUTHORS(author_id)
+);
 
---
--- Dumping data for table `Authors`
---
+CREATE TABLE CUSTOMERS (
+    customer_id INT PRIMARY KEY,
+    customer_name VARCHAR(215),
+    email VARCHAR(215),
+    address TEXT
+);
 
-LOCK TABLES `Authors` WRITE;
-/*!40000 ALTER TABLE `Authors` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Authors` ENABLE KEYS */;
-UNLOCK TABLES;
+CREATE TABLE ORDERS (
+    order_id INT PRIMARY KEY,
+    customer_id INT,
+    order_date DATE,
+    FOREIGN KEY (customer_id) REFERENCES CUSTOMERS(customer_id)
+);
 
---
--- Table structure for table `Books`
---
+CREATE TABLE ORDER_DETAILS (
+    orderdetailid INT PRIMARY KEY,
+    order_id INT,
+    book_id INT,
+    quantity DOUBLE,
+    FOREIGN KEY (order_id) REFERENCES ORDERS(order_id),
+    FOREIGN KEY (book_id) REFERENCES BOOKS(book_id)
+);
 
-DROP TABLE IF EXISTS `Books`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Books` (
-  `book_id` int NOT NULL,
-  `title` varchar(130) DEFAULT NULL,
-  `author_id` int DEFAULT NULL,
-  `price` double DEFAULT NULL,
-  `publication_date` date DEFAULT NULL,
-  PRIMARY KEY (`book_id`),
-  KEY `author_id` (`author_id`),
-  CONSTRAINT `Books_ibfk_1` FOREIGN KEY (`author_id`) REFERENCES `Authors` (`author_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `Books`
---
-
-LOCK TABLES `Books` WRITE;
-/*!40000 ALTER TABLE `Books` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Books` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `Customers`
---
-
-DROP TABLE IF EXISTS `Customers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Customers` (
-  `customer_id` int NOT NULL,
-  `customer_name` varchar(215) DEFAULT NULL,
-  `email` varchar(215) DEFAULT NULL,
-  `address` text,
-  PRIMARY KEY (`customer_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `Customers`
---
-
-LOCK TABLES `Customers` WRITE;
-/*!40000 ALTER TABLE `Customers` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Customers` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `Order_Details`
---
-
-DROP TABLE IF EXISTS `Order_Details`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Order_Details` (
-  `orderdetailid` int NOT NULL,
-  `order_id` int DEFAULT NULL,
-  `book_id` int DEFAULT NULL,
-  `quantity` double DEFAULT NULL,
-  PRIMARY KEY (`orderdetailid`),
-  KEY `order_id` (`order_id`),
-  KEY `book_id` (`book_id`),
-  CONSTRAINT `Order_Details_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `Orders` (`order_id`),
-  CONSTRAINT `Order_Details_ibfk_2` FOREIGN KEY (`book_id`) REFERENCES `Books` (`book_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `Order_Details`
---
-
-LOCK TABLES `Order_Details` WRITE;
-/*!40000 ALTER TABLE `Order_Details` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Order_Details` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `Orders`
---
-
-DROP TABLE IF EXISTS `Orders`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Orders` (
-  `order_id` int NOT NULL,
-  `customer_id` int DEFAULT NULL,
-  `order_date` date DEFAULT NULL,
-  PRIMARY KEY (`order_id`),
-  KEY `customer_id` (`customer_id`),
-  CONSTRAINT `Orders_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `Customers` (`customer_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `Orders`
---
-
-LOCK TABLES `Orders` WRITE;
-/*!40000 ALTER TABLE `Orders` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Orders` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2025-10-19 16:21:52
+-- OPTIONAL SAMPLE DATA (recommended)
+INSERT INTO AUTHORS (author_id, author_name) VALUES (1, 'J.K. ROWLING');
+INSERT INTO BOOKS (book_id, title, author_id, price, publication_date)
+VALUES (1, 'HARRY POTTER', 1, 29.99, '2001-06-26');
+INSERT INTO CUSTOMERS (customer_id, customer_name, email, address)
+VALUES (1, 'JOHN DOE', 'john@example.com', '123 Main St');
+INSERT INTO ORDERS (order_id, customer_id, order_date)
+VALUES (1, 1, '2025-10-19');
+INSERT INTO ORDER_DETAILS (orderdetailid, order_id, book_id, quantity)
+VALUES (1, 1, 1, 2);
